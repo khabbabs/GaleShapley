@@ -1,0 +1,129 @@
+\documentclass[a4paper,12pt]{article}
+\begin{document}
+ \section{Overview}
+ 	
+At first we discuss the importance of certain elements in the algorithm which are required for the fastest output possible. Many of these elements require special subsets of certain data structures to in order to achieve an optimized run time. The absolute worst case scenario for the marriage stable problem is \(\bigcirc (n^2)\), has we will see that by use of powerful data structures we can far surpass the worst case. In order to discuss the running time of the actual running time of the Java code, we must understand the common running times of the individual structures used in it. 
+  
+
+
+
+\section{Code(Java)}
+
+\begin{verbatim}
+private void applyGs(){
+		Male m;
+		Female f;
+
+		long start,end;
+		double duration;
+		start =System.nanoTime();
+		while(singleMaleList.size()!=0){
+
+			m = singleMaleList.remove();
+			f = m.preferenceQueue.remove();
+			if(f.engagedTo==null){
+				f.engagedTo=m;
+			}
+			else{
+				if(f.prefernceList.indexOf(f.engagedTo) < f.prefernceList.indexOf(m)){
+					singleMaleList.add(m);
+				}
+				else{
+					singleMaleList.add(f.engagedTo);
+					f.engagedTo=m;
+				}
+			}
+		}
+		assembleFinalPairs();
+	}	
+\end{verbatim}
+
+
+\begin{verbatim}
+
+private class Male {
+		private String name;
+		private Queue<Female> preferenceQueue;
+
+		....
+	}
+\end{verbatim}
+\begin{verbatim}
+	private class Female {
+		private Male engagedTo;
+		private String name;
+		private LinkedList<Male> prefernceList;
+		...
+	}
+\end{verbatim}
+
+
+\section{Common run times }
+
+Running Times of the two main Data Structures used in the Code.
+
+\subsection{LinkedList}
+\begin{center}
+\begin{tabular}{l|r}
+\hline
+ Method & Run Time\\
+ \hline
+ Indexing & \(\bigcirc (n)\)\\  
+\hline
+ insert/delete(not at the start or end) & \( search time +\bigcirc (1)\)\\ 
+\hline
+\end{tabular}
+\end{center}
+
+
+\subsection{HashMap}
+\begin{center}
+\begin{tabular}{l|r}
+\hline
+ Method & Run Time\\
+ \hline
+ Indexing & \(\bigcirc (n)\)\\  
+\hline
+ insert & \(\bigcirc (1)\)\\ 
+\hline
+ remove(n=total elements k=current index) & \(\bigcirc (1 + n/k)\)\\ 
+\hline
+\end{tabular}
+\end{center}
+
+\section{Trial Results}
+Ran the code  for 11 different trials. The input files were at random, meaning they were not set
+for the worst case scenario where women and men have the exact opposite preference lists.   
+\begin{center}
+\begin{tabular}{l|r}
+\hline
+ n (Size of the input) & Time in seconds\\
+ \hline
+ 50 & \( 7.834*10^-4\)\\ 
+\hline
+ 100 & \( 1*10^-3\)\\ 
+\hline
+ 150 & \( 2.59*10^-3\)\\ 
+\hline
+200 & \( 8.95*10^-3\)\\ 
+\hline
+250 & \( 9.39*10^-3\)\\ 
+\hline
+500 & \( 9.69*10^-3\)\\ 
+\hline
+1000 & \( 1.17*10^-2\)\\ 
+\hline
+1500 & \( 3.72*10^-2\)\\ 
+\hline
+2000 & \( 6.87*10^-2\)\\ 
+\hline
+2500 & \( 6.67*10^-2\)\\ 
+\hline
+5000 & \( 2.224*10^-1\)\\ 
+\hline
+\end{tabular}
+\end{center}
+lack of increase in running time from n = 250 to 500, and from 2000 to 2500 is based on the input file being near best case scenario rather then the later.  
+
+
+\end{document}
